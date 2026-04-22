@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LoCo Pro Wrestling — The Story</title>
+  <meta name="description" content="How LoCo Pro Wrestling brought independent wrestling back to Longmont, Colorado." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="css/site.css" />
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useEffect, useState } = React;
+
+    const LINKS = {
+      home: "index.html",
+      story: "story.html",
+      pressRelease: "pr/PR-LoCo-Pro-Wrestling-Vendetta-at-the-Opera-House-2026.html",
+      ticket: "https://www.eventbrite.com/e/vendetta-at-the-opera-house-tickets-1981065204355",
+      history: "history.html",
+      sponsors: "sponsors.html",
+      support: "support.html",
+      privacy: "privacy.html",
+      terms: "terms.html",
+      patreon: "https://patreon.com/LoCoProWrestling",
+      youtube: "https://www.youtube.com/@locoprowrestling",
+      email: "mailto:biz@locopro.pw",
+    };
+
+    const SOCIAL_LINKS = [
+      { href: "https://youtube.com/@locoprowrestling", icon: "social-icons/youtube-icon.png", label: "YouTube" },
+      { href: "https://instagram.com/locoprowrestling", icon: "social-icons/instagram-icon.png", label: "Instagram" },
+      { href: "https://x.com/LoCoProWrestlng", icon: "social-icons/x-icon.png", label: "X" },
+      { href: "https://tiktok.com/@locoprowrestling", icon: "social-icons/tiktok-icon.png", label: "TikTok" },
+      { href: "https://locoprowrestling.bsky.social", icon: "social-icons/bluesky-icon.png", label: "Bluesky" },
+      { href: "https://threads.com/@locoprowrestling", icon: "social-icons/threads-icon.png", label: "Threads" },
+      { href: "https://www.reddit.com/r/Longmont", icon: "social-icons/reddit-icon.png", label: "Reddit" },
+      { href: "https://www.twitch.tv/locoprowrestling", icon: "social-icons/twitch-icon.png", label: "Twitch" },
+      { href: "https://streamlabs.com/locoprowrestling", icon: "social-icons/streamlabs-icon.png", label: "Streamlabs" },
+      { href: "https://patreon.com/LoCoProWrestling", icon: "social-icons/patreon-icon.png", label: "Patreon" },
+    ];
+
+    const LOGO_URL = "webimages/locopro-logo.png";
+    const HERO_BG_URL = "webimages/VatOH-BG.png";
+    const CURSOR_OFFSET = { x: -2, y: -2 };
+
+    const TIMELINE = [
+      {
+        period: "June 2017",
+        title: "LoCo Pro Wrestling is born",
+        body: "On a late-summer night, LoCo Pro Wrestling was born from a single idea. Longmont stopped waiting for someone else to bring wrestling home."
+      },
+      {
+        period: "August 2017",
+        title: "Battle at the Opera House I",
+        body: "The Rising stormed the Dickens Opera House and stunned the establishment with a decisive victory. Longmont’s crowd shook the rafters, and the city chose momentum over tradition."
+      },
+      {
+        period: "2018 – 2024",
+        title: "Status quo squeeze",
+        body: "The Pillars spent every day since that night tightening their grip—controlling bookings, burying footage, and insisting the result was a fluke. The Rising kept pushing, refusing to let history be rewritten."
+      },
+      {
+        period: "November 16, 2025",
+        title: "Battle at the Opera House returns",
+        body: "We’re bringing the fight back under the same lights. The Rising aims to prove their first triumph was destiny. The Pillars are desperate to keep the city under their thumb. Longmont decides which story stands."
+      },
+    ];
+
+    const VALUES = [
+      {
+        title: "Colorado roots",
+        body: "We build cards around Rocky Mountain performers and the creatives who support them—videographers, photographers, costume designers, and storytellers who live within a short drive of Main Street."
+      },
+      {
+        title: "Inclusive energy",
+        body: "Longmont shows up as families, friend groups, and first-timers. We build every night to feel like a neighborhood block party. Chant loud, high-five strangers, and know the crew is looking out for everyone the moment they walk through the Opera House doors."
+      },
+      {
+        title: "Sustainable hustle",
+        body: "LoCo Pro Wrestling is built by people with day jobs, families, and responsibilities. We balance ambition with rest, invest back into the crew, and publish our road map so the community sees where every dollar goes."
+      },
+    ];
+
+    const TOURNAMENT_NOTES = [
+      {
+        title: "Semi-final 1",
+        body: "Cody Devine (with Anuka Gutierrez) slowed Major Glory, leaning on contracts and a ref payoff to advance.",
+      },
+      {
+        title: "Semi-final 2",
+        body: "Zeak Gallent absorbed Nicky Hyde’s shortcuts and advanced by count-out when Hyde’s hubris backfired.",
+      },
+      {
+        title: "City of Lights Battle Royale",
+        body: "Dean Mercer bulldozed the field—tossing Major Glory last—to claim the finals slot for The Pillars.",
+      },
+      {
+        title: "Tournament Finals",
+        body: "Triple threat: Dean Mercer vs Cody Devine vs Zeak Gallent. Zeak overcame the odds to win for The Rising.",
+      },
+    ];
+
+    function CTA({ href, children, variant = "primary" }) {
+      const classes = ["btn"];
+      if (variant === "ghost") classes.push("btn--ghost");
+      else if (variant === "outline") classes.push("btn--outline-dark");
+      else classes.push("btn--primary");
+      return (
+        <a href={href} className={classes.join(" ")}>
+          {children}
+        </a>
+      );
+    }
+
+    function SocialLinks({ tone = "dark", className = "" }) {
+      const classes = [
+        "social-list",
+        tone === "light" ? "social-list--light" : "social-list--dark",
+        className
+      ].filter(Boolean);
+      return (
+        <div className={classes.join(" ")}>
+          {SOCIAL_LINKS.map(({ href, icon, label }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer">
+              <img src={icon} alt="" aria-hidden="true" />
+              <span className="sr-only">{label}</span>
+            </a>
+          ))}
+        </div>
+      );
+    }
+
+    function CursorLogo({ src }) {
+      const [position, setPosition] = useState({ x: null, y: null });
+
+      useEffect(() => {
+        if (typeof window === "undefined") {
+          return undefined;
+        }
+        let frame = 0;
+        let lastCoords = null;
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) {
+          return undefined;
+        }
+
+        const update = () => {
+          if (lastCoords) {
+            setPosition(lastCoords);
+            frame = 0;
+            lastCoords = null;
+          }
+        };
+
+        const handleMove = (event) => {
+          if (event.pointerType === "touch") return;
+          lastCoords = { x: event.clientX, y: event.clientY };
+          if (!frame) {
+            frame = requestAnimationFrame(update);
+          }
+        };
+
+        const moveEvent = "PointerEvent" in window ? "pointermove" : "mousemove";
+        window.addEventListener(moveEvent, handleMove, { passive: true });
+        return () => {
+          window.removeEventListener(moveEvent, handleMove);
+          if (frame) {
+            cancelAnimationFrame(frame);
+          }
+        };
+      }, []);
+
+      if (position.x === null || position.y === null) {
+        return null;
+      }
+
+      return (
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            top: `${position.y}px`,
+            left: `${position.x}px`,
+            width: "80px",
+            maxWidth: "20vw",
+            transform: `translate(${CURSOR_OFFSET.x}px, ${CURSOR_OFFSET.y}px)`,
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: 1000,
+            transition: "transform 0.06s linear",
+            willChange: "transform"
+          }}
+        />
+      );
+    }
+
+    function Nav() {
+      return (
+        <header className="site-header">
+          <div className="container site-header__inner">
+            <a href={LINKS.home} className="site-header__brand">
+              <img src={LOGO_URL} alt="LoCo Pro Wrestling logo" width="44" height="44" />
+              <span>LoCo Pro Wrestling</span>
+            </a>
+            <nav className="site-nav">
+              <CTA href={LINKS.ticket}>Tickets</CTA>
+              <CTA href={LINKS.support} variant="ghost">Support</CTA>
+              <CTA href={LINKS.sponsors} variant="ghost">Sponsors</CTA>
+              <CTA href={LINKS.youtube} variant="ghost">YouTube</CTA>
+            </nav>
+          </div>
+        </header>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section className="hero" style={{ backgroundImage: `url(${HERO_BG_URL})` }}>
+          <div className="hero__inner">
+            <div className="hero__pill">The Story</div>
+            <h1 className="hero__title">LoCo Pro Wrestling</h1>
+            <p className="hero__copy">
+              From a spark in downtown Longmont to an all-ages spectacle at the Dickens Opera House, this is how a crew of dreamers, volunteers, and wrestlers built a homegrown promotion with Colorado DNA.
+            </p>
+            <div className="hero__actions">
+              <CTA href={LINKS.history} variant="ghost">Explore Longmont’s history</CTA>
+              <CTA href={LINKS.patreon} variant="ghost">Back the project</CTA>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Origin() {
+      return (
+        <section className="section">
+          <div className="container">
+            <p className="section__eyebrow">Origin</p>
+            <h2 className="section__title">It started with a question.</h2>
+            <div className="story-grid">
+              <article className="story-card">
+                <p>
+                  Independent wrestling skipped Longmont for far too long. Boulder had big venues, Denver had bright lights, but our city had passionate fans and a historic opera house begging for a comeback story. What if we could bring professional wrestling to Longmont?
+                </p>
+              </article>
+              <article className="story-card">
+                <p>
+                  That fall, the first Battle at the Opera House ended with The Rising standing tall and the crowd echoing through Main Street. It proved that a Longmont-built promotion could flip the script on Colorado wrestling overnight.
+                </p>
+              </article>
+              <article className="story-card">
+                <p>
+                  The Pillars have tried to muffle that roar ever since, tightening their grip on the status quo. But the city remembers. Every training session, every flyer, every chant keeps the truth alive—and pushes us toward the next bell.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Timeline() {
+      return (
+        <section className="section section--dark">
+          <div className="container">
+            <div className="section__header section__header--split">
+              <div>
+                <p className="section__eyebrow">Timeline</p>
+                <h2 className="section__title">From idea to bell time.</h2>
+              </div>
+            <p className="section__description">
+              LoCo Pro Wrestling grew one late night, one training session, and one community meeting at a time. These mile markers track the fight to keep Longmont’s victory in the light.
+            </p>
+            </div>
+            <div className="timeline-grid">
+              {TIMELINE.map((item) => (
+                <article key={item.period} className="timeline-card">
+                  <div className="timeline-card__period">{item.period}</div>
+                  <h3 className="timeline-card__title">{item.title}</h3>
+                  <p className="timeline-card__body">{item.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Values() {
+      return (
+        <section className="section">
+          <div className="container">
+            <div className="section__header section__header--split">
+              <div>
+                <p className="section__eyebrow">What we stand for</p>
+                <h2 className="section__title">The pillars of LoCo Pro Wrestling.</h2>
+              </div>
+              <p className="section__description">
+                Our values keep the locker room focused and the fan experience electric. This is the checklist we run through before every event.
+              </p>
+            </div>
+            <div className="values-grid">
+              {VALUES.map((value) => (
+                <article key={value.title} className="value-card">
+                  <h3>{value.title}</h3>
+                  <p>{value.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function TournamentRecap() {
+      return (
+        <section className="section section--muted">
+          <div className="container">
+            <div className="section__header section__header--split">
+              <div>
+                <p className="section__eyebrow">City of Lights Tournament</p>
+                <h2 className="section__title">Battle at the Opera House, by the lore.</h2>
+              </div>
+            </div>
+            <div className="values-grid">
+              {TOURNAMENT_NOTES.map((note) => (
+                <article key={note.title} className="value-card">
+                  <h3>{note.title}</h3>
+                  <p>{note.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Callout() {
+      return (
+        <section className="callout">
+          <div className="callout__inner">
+            <h2 className="callout__title">The story keeps unfolding.</h2>
+            <p className="callout__copy">
+              Every show adds a new chapter—new rivalries, new allies, and fresh proof that The Rising’s first win still matters. The Pillars can’t smother a city that sings. Join us ringside and make sure Longmont’s voice carries.
+            </p>
+            <div className="callout__actions">
+              <CTA href={LINKS.history} variant="ghost">Trace the history</CTA>
+              <CTA href={LINKS.youtube} variant="ghost">Catch our highlights</CTA>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="footer">
+          <div className="container">
+            <div className="footer__grid">
+              <div>
+                <div className="footer__heading">LoCo Pro Wrestling</div>
+                <p className="section__description" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                  Longmont’s homegrown pro wrestling project.
+                </p>
+                <SocialLinks tone="dark" className="footer__socials" />
+              </div>
+              <div>
+                <div className="footer__heading">Event</div>
+                <ul className="footer__links">
+                  <li>Sat, Mar 7, 2026</li>
+                  <li>Dickens Opera House</li>
+                  <li>Doors 5:00 • Bell 6:15</li>
+                </ul>
+              </div>
+            <div>
+              <div className="footer__heading">Links</div>
+              <div className="footer__links">
+                <a href={LINKS.ticket}>Tickets</a>
+                <a href={LINKS.support}>Support</a>
+                <a href={LINKS.sponsors}>Sponsors</a>
+                <a href={LINKS.youtube}>YouTube</a>
+                <a href={LINKS.patreon}>Patreon</a>
+                <a href={LINKS.privacy}>Privacy Policy</a>
+                <a href={LINKS.terms}>Terms of Service</a>
+                <a href={LINKS.story}>The Story</a>
+                <a href={LINKS.pressRelease}>Press Release</a>
+              </div>
+              </div>
+              <div>
+                <div className="footer__heading">Contact</div>
+                <div className="footer__links">
+                  <a href={LINKS.email}>biz@locopro.pw</a>
+                </div>
+              </div>
+            </div>
+            <div className="footer__meta">© {new Date().getFullYear()} LoCo Pro Wrestling LLC</div>
+          </div>
+        </footer>
+      );
+    }
+
+    function StoryPage() {
+      return (
+        <>
+          <Nav />
+          <main>
+            <Hero />
+            <Origin />
+            <Timeline />
+            <Values />
+            <TournamentRecap />
+            <Callout />
+          </main>
+          <Footer />
+          <CursorLogo src={LOGO_URL} />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<StoryPage />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LoCo Pro Wrestling — Sponsors</title>
+  <meta name="description" content="Partners who power LoCo Pro Wrestling at the Dickens Opera House." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="css/site.css" />
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useEffect, useState } = React;
+
+    const LINKS = {
+      home: "index.html",
+      story: "story.html",
+      pressRelease: "pr/PR-LoCo-Pro-Wrestling-Vendetta-at-the-Opera-House-2026.html",
+      ticket: "https://www.eventbrite.com/e/vendetta-at-the-opera-house-tickets-1981065204355",
+      history: "history.html",
+      sponsors: "sponsors.html",
+      support: "support.html",
+      privacy: "privacy.html",
+      terms: "terms.html",
+      patreon: "https://patreon.com/LoCoProWrestling",
+      youtube: "https://www.youtube.com/@locoprowrestling",
+      email: "mailto:biz@locopro.pw",
+    };
+
+    const SOCIAL_LINKS = [
+      { href: "https://youtube.com/@locoprowrestling", icon: "social-icons/youtube-icon.png", label: "YouTube" },
+      { href: "https://instagram.com/locoprowrestling", icon: "social-icons/instagram-icon.png", label: "Instagram" },
+      { href: "https://x.com/LoCoProWrestlng", icon: "social-icons/x-icon.png", label: "X" },
+      { href: "https://tiktok.com/@locoprowrestling", icon: "social-icons/tiktok-icon.png", label: "TikTok" },
+      { href: "https://locoprowrestling.bsky.social", icon: "social-icons/bluesky-icon.png", label: "Bluesky" },
+      { href: "https://threads.com/@locoprowrestling", icon: "social-icons/threads-icon.png", label: "Threads" },
+      { href: "https://www.reddit.com/r/Longmont", icon: "social-icons/reddit-icon.png", label: "Reddit" },
+      { href: "https://www.twitch.tv/locoprowrestling", icon: "social-icons/twitch-icon.png", label: "Twitch" },
+      { href: "https://streamlabs.com/locoprowrestling", icon: "social-icons/streamlabs-icon.png", label: "Streamlabs" },
+      { href: "https://patreon.com/LoCoProWrestling", icon: "social-icons/patreon-icon.png", label: "Patreon" },
+    ];
+
+    const LOGO_URL = "webimages/locopro-logo.png";
+    const HERO_BG_URL = "webimages/VatOH-BG.png";
+    const CURSOR_OFFSET = { x: -2, y: -2 };
+
+    const VENUE_SPONSOR = {
+      name: "Dickens Opera House",
+      image: "webimages/SPONSOR-DOH1.png",
+      href: "https://dickensoperahouse.co"
+    };
+
+    const PATREON_TIERS = [
+      {
+        title: "Joined the Rising",
+        body: "Fans backing the scrappy side of Longmont wrestling.",
+        href: LINKS.patreon
+      },
+      {
+        title: "Supported The Pillars",
+        body: "Standing behind tradition, order, and the establishment.",
+        href: LINKS.patreon
+      },
+      {
+        title: "The Commissioner's Circle",
+        body: "Top-tier supporters keeping the lights on and the bell ringing.",
+        href: LINKS.patreon
+      },
+    ];
+
+    function CTA({ href, children, variant = "primary" }) {
+      const classes = ["btn"];
+      if (variant === "ghost") classes.push("btn--ghost");
+      else if (variant === "outline") classes.push("btn--outline-dark");
+      else classes.push("btn--primary");
+      return (
+        <a href={href} className={classes.join(" ")}>
+          {children}
+        </a>
+      );
+    }
+
+    function SocialLinks({ tone = "dark", className = "" }) {
+      const classes = [
+        "social-list",
+        tone === "light" ? "social-list--light" : "social-list--dark",
+        className
+      ].filter(Boolean);
+      return (
+        <div className={classes.join(" ")}>
+          {SOCIAL_LINKS.map(({ href, icon, label }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer">
+              <img src={icon} alt="" aria-hidden="true" />
+              <span className="sr-only">{label}</span>
+            </a>
+          ))}
+        </div>
+      );
+    }
+
+    function CursorLogo({ src }) {
+      const [position, setPosition] = useState({ x: null, y: null });
+
+      useEffect(() => {
+        if (typeof window === "undefined") {
+          return undefined;
+        }
+        let frame = 0;
+        let lastCoords = null;
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) {
+          return undefined;
+        }
+
+        const update = () => {
+          if (lastCoords) {
+            setPosition(lastCoords);
+            frame = 0;
+            lastCoords = null;
+          }
+        };
+
+        const handleMove = (event) => {
+          if (event.pointerType === "touch") return;
+          lastCoords = { x: event.clientX, y: event.clientY };
+          if (!frame) {
+            frame = requestAnimationFrame(update);
+          }
+        };
+
+        window.addEventListener("pointermove", handleMove);
+        return () => {
+          window.removeEventListener("pointermove", handleMove);
+          if (frame) {
+            cancelAnimationFrame(frame);
+          }
+        };
+      }, []);
+
+      if (!position || position.x === null) return null;
+
+      return (
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            top: `${position.y}px`,
+            left: `${position.x}px`,
+            width: "80px",
+            maxWidth: "20vw",
+            transform: `translate(${CURSOR_OFFSET.x}px, ${CURSOR_OFFSET.y}px)`,
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: 1000,
+            transition: "transform 0.06s linear",
+            willChange: "transform"
+          }}
+        />
+      );
+    }
+
+    function Nav() {
+      return (
+        <header className="site-header">
+          <div className="container site-header__inner">
+            <a href={LINKS.home} className="site-header__brand">
+              <img src={LOGO_URL} alt="LoCo Pro Wrestling logo" width="44" height="44" />
+              <span>LoCo Pro Wrestling</span>
+            </a>
+            <nav className="site-nav">
+              <CTA href={LINKS.ticket}>Tickets</CTA>
+              <CTA href={LINKS.support} variant="ghost">Support</CTA>
+              <CTA href={LINKS.sponsors} variant="ghost">Sponsors</CTA>
+              <CTA href={LINKS.youtube} variant="ghost">YouTube</CTA>
+            </nav>
+          </div>
+        </header>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section className="hero" style={{ backgroundImage: `url(${HERO_BG_URL})` }}>
+          <div className="hero__inner">
+            <div className="hero__pill">Sponsors</div>
+            <h1 className="hero__title">The partners behind the bell.</h1>
+            <p className="hero__copy">
+              LoCo Pro Wrestling thrives because local champions, patrons, and hometown businesses step into the ring with us.
+            </p>
+            <div className="hero__actions">
+              <CTA href={LINKS.email} variant="ghost">Become a sponsor</CTA>
+              <CTA href={LINKS.patreon} variant="ghost">Back us on Patreon</CTA>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function VenueSponsor() {
+      return (
+        <section className="section">
+          <div className="container">
+            <div className="section__header">
+              <div>
+                <p className="section__eyebrow">Venue Sponsor</p>
+                <h2 className="section__title">Dickens Opera House</h2>
+                <p className="section__description">
+                  Our home base for Battle at the Opera House and the place Longmont gathers for a night of pro wrestling.
+                </p>
+              </div>
+            </div>
+            <div className="values-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+              <article className="value-card" style={{ maxWidth: "360px", margin: 0, padding: "24px" }}>
+                <a href={VENUE_SPONSOR.href} target="_blank" rel="noopener noreferrer">
+                  <img
+                    className="value-card__image"
+                    src={VENUE_SPONSOR.image}
+                    alt="Dickens Opera House exterior"
+                    loading="lazy"
+                    style={{
+                      maxWidth: "256px",
+                      display: "block",
+                      margin: "0 auto",
+                      aspectRatio: "auto",
+                      height: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
+                </a>
+              </article>
+              <article className="value-card" style={{ padding: "24px" }}>
+                <h3 style={{ marginTop: 0 }}>Historic facts</h3>
+                <ul className="footer__links" style={{ color: "var(--color-text)", margin: "16px 0 0" }}>
+                  <li>Built in 1881 and operating by 1882 as Longmont's community venue.</li>
+                  <li>Named for builder William Henry Dickens, a relative of Charles Dickens.</li>
+                  <li>Mixed-use from day one: bank and storefronts on the first floor, auditorium upstairs.</li>
+                  <li>Survived the 1905 Masonic Temple fire that threatened the block.</li>
+                </ul>
+                <p style={{ margin: "16px 0 0", fontSize: "0.9rem", color: "var(--color-text-muted)" }}>
+                  Sources:
+                  <a href="https://npgallery.nps.gov/GetAsset/9b799a25-e8bf-49e5-8507-af261e13c5e2" target="_blank" rel="noopener noreferrer"> National Park Service</a>,
+                  <a href="https://dickensoperahouse.co/about/" target="_blank" rel="noopener noreferrer"> Dickens Opera House</a>,
+                  <a href="https://longmontcolorado.gov/information/about-longmont/history-of-longmont/" target="_blank" rel="noopener noreferrer"> City of Longmont</a>.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function LocalBusinessSponsors() {
+      return (
+        <section className="section section--muted">
+          <div className="container">
+            <div className="section__header section__header--split">
+              <div>
+                <p className="section__eyebrow">Local Business Sponsors</p>
+                <h2 className="section__title">Bring your business to the main event.</h2>
+                <p className="section__description">
+                  We spotlight Longmont-area brands that want to grow alongside the loudest crowd in Colorado wrestling.
+                </p>
+              </div>
+            </div>
+            <div className="email-card" style={{ marginTop: "32px" }}>
+              <div>
+                <h3 style={{ marginTop: 0 }}>Let’s build a custom sponsorship.</h3>
+                <p className="email-card__message">
+                  Please reach out to biz@locopro.pw for Local Sponsorship inquiries.
+                </p>
+              </div>
+              <CTA href={LINKS.email} variant="primary">Contact biz@locopro.pw</CTA>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function PatreonSponsors() {
+      return (
+        <section className="section section--dark">
+          <div className="container">
+            <div className="section__header">
+              <div>
+                <p className="section__eyebrow">Patreon Sponsors</p>
+                <h2 className="section__title">Every pledge keeps the story rolling.</h2>
+                <p className="section__description">
+                  These tiers power the roster, the production, and every moment in the Opera House spotlight.
+                </p>
+              </div>
+            </div>
+            <div className="highlight-grid" style={{ marginTop: "48px" }}>
+              {PATREON_TIERS.map((tier) => (
+                <article key={tier.title} className="highlight-card">
+                  <h3>{tier.title}</h3>
+                  <p>{tier.body}</p>
+                  <div className="story-card__actions">
+                    <a className="story-link" href={tier.href} target="_blank" rel="noopener noreferrer">
+                      Visit patreon.com/LoCoProWrestling
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="footer">
+          <div className="container">
+            <div className="footer__grid">
+              <div>
+                <div className="footer__heading">LoCo Pro Wrestling</div>
+                <p className="section__description" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                  Longmont’s homegrown pro wrestling project.
+                </p>
+                <SocialLinks tone="dark" className="footer__socials" />
+              </div>
+              <div>
+                <div className="footer__heading">Event</div>
+                <ul className="footer__links">
+                  <li>Sat, Mar 7, 2026</li>
+                  <li>Dickens Opera House</li>
+                  <li>Doors 5:00 • Bell 6:15</li>
+                </ul>
+              </div>
+              <div>
+              <div className="footer__heading">Links</div>
+              <div className="footer__links">
+                <a href={LINKS.ticket}>Tickets</a>
+                <a href={LINKS.support}>Support</a>
+                <a href={LINKS.sponsors}>Sponsors</a>
+                <a href={LINKS.youtube}>YouTube</a>
+                <a href={LINKS.patreon}>Patreon</a>
+                <a href={LINKS.privacy}>Privacy Policy</a>
+                <a href={LINKS.terms}>Terms of Service</a>
+                <a href={LINKS.story}>The Story</a>
+                <a href={LINKS.pressRelease}>Press Release</a>
+                </div>
+              </div>
+              <div>
+                <div className="footer__heading">Contact</div>
+                <div className="footer__links">
+                  <a href={LINKS.email}>biz@locopro.pw</a>
+                </div>
+              </div>
+            </div>
+            <div className="footer__meta">© {new Date().getFullYear()} LoCo Pro Wrestling LLC</div>
+          </div>
+        </footer>
+      );
+    }
+
+    function SponsorsPage() {
+      return (
+        <>
+          <Nav />
+          <main>
+            <Hero />
+            <VenueSponsor />
+            <LocalBusinessSponsors />
+            <PatreonSponsors />
+          </main>
+          <Footer />
+          <CursorLogo src={LOGO_URL} />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<SponsorsPage />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LoCo Pro Wrestling — Vendetta at the Opera House 2026</title>
+  <meta name="description" content="Independent wrestling returns to Longmont. Sat, Mar 7, 2026 • Dickens Opera House • Doors 5 • Bell 6:15." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="css/site.css" />
+  <meta name="facebook-domain-verification" content="b2zv01l1pglz5df5t7rv6z51ci0bfe" />
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useEffect, useMemo, useState } = React;
+
+    const LINKS = {
+      story: "story.html",
+      pressRelease: "pr/PR-LoCo-Pro-Wrestling-Vendetta-at-the-Opera-House-2026.html",
+      ticket: "https://www.eventbrite.com/e/vendetta-at-the-opera-house-tickets-1981065204355",
+      rising: "the-rising.html",
+      pillars: "the-pillars.html",
+      history: "history.html",
+      city: "two-factions.html",
+      sponsors: "sponsors.html",
+      support: "support.html",
+      privacy: "privacy.html",
+      terms: "terms.html",
+      patreon: "https://patreon.com/LoCoProWrestling",
+      youtube: "https://www.youtube.com/@locoprowrestling",
+      email: "mailto:biz@locopro.pw",
+    };
+
+    const SOCIAL_LINKS = [
+      { href: "https://youtube.com/@locoprowrestling", icon: "social-icons/youtube-icon.png", label: "YouTube" },
+      { href: "https://instagram.com/locoprowrestling", icon: "social-icons/instagram-icon.png", label: "Instagram" },
+      { href: "https://x.com/LoCoProWrestlng", icon: "social-icons/x-icon.png", label: "X" },
+      { href: "https://tiktok.com/@locoprowrestling", icon: "social-icons/tiktok-icon.png", label: "TikTok" },
+      { href: "https://locoprowrestling.bsky.social", icon: "social-icons/bluesky-icon.png", label: "Bluesky" },
+      { href: "https://threads.com/@locoprowrestling", icon: "social-icons/threads-icon.png", label: "Threads" },
+      { href: "https://www.reddit.com/r/Longmont", icon: "social-icons/reddit-icon.png", label: "Reddit" },
+      { href: "https://www.twitch.tv/locoprowrestling", icon: "social-icons/twitch-icon.png", label: "Twitch" },
+      { href: "https://streamlabs.com/locoprowrestling", icon: "social-icons/streamlabs-icon.png", label: "Streamlabs" },
+      { href: "https://patreon.com/LoCoProWrestling", icon: "social-icons/patreon-icon.png", label: "Patreon" },
+    ];
+
+    const LOGO_URL = "webimages/locopro-logo.png";
+    const HERO_BG_URL = "webimages/VatOH-BG.png";
+    const CURSOR_OFFSET = { x: -2, y: -2 };
+
+    const HIGHLIGHTS = [
+      {
+        title: "Independent. Local. Loud.",
+        body: "A one-night showcase of Colorado indie wrestling inside a historic landmark.",
+        img: { src: "webimages/locopro-logo.png", alt: "LoCo Pro Wrestling logo" },
+        href: "#roster"
+      },
+      {
+        title: "Two factions. One city.",
+        body: "The Rising vs The Pillars. Pick your side, bring your voice.",
+        img: { src: "webimages/RvP.png", alt: "Two wrestlers squaring off" },
+        href: LINKS.city
+      },
+      {
+        title: "Where Longmont becomes legend.",
+        body: "We’re building something homegrown and unforgettable — be part of it.",
+        img: { src: "webimages/Longmont.png", alt: "Downtown Longmont" },
+        href: LINKS.history
+      },
+    ];
+
+    const STORY_CARDS = [
+      {
+        title: "The Rising",
+        body: "“We don’t wait for permission. We Rise.”",
+        logo: "webimages/logo-the-rising.png",
+        href: "the-rising.html"
+      },
+      {
+        title: "The Pillars",
+        body: "“Order. Tradition. Control.” Foundations won’t crack.",
+        logo: "webimages/logo-the-pillars.png",
+        href: "the-pillars.html"
+      },
+    ];
+
+    const ROSTER = [
+      {
+        name: "Zeak Gallent",
+        tag: "The Rising - City of Lights Champion. Torchbearer.",
+        img: { src: "webimages/TAS-Zeak-Gallent.png", alt: "Zeak Gallent staring down the opposition" },
+        href: "players/zeak-gallent.html"
+      },
+      {
+        name: "ERZA",
+        tag: "The Rising - Enigmatic edge of The Rising.",
+        img: { src: "webimages/TAS-ERZA.png", alt: "ERZA staring down the camera" },
+        href: "players/erza.html"
+      },
+      {
+        name: "Johnny Crash",
+        tag: "The Rising - Heart of the crew. Fights for those who can’t.",
+        img: { src: "webimages/TAS-Johnny-Crash.png", alt: "Johnny Crash swinging for the underdog" },
+        href: "players/johnny-crash.html"
+      },
+      {
+        name: "Carter Cash",
+        tag: "The Rising - “The Future.” High flyer with heart.",
+        img: { src: "webimages/TAS-Carter-Cash.png", alt: "Carter Cash staring down the ring" },
+        href: "players/carter-cash.html"
+      },
+      {
+        name: "JT Staten",
+        tag: "The Pillars - The Powerbroker. Cunning with a pen and a contract.",
+        img: { src: "webimages/TAS-JT-Staten.png", alt: "JT Staten weighing a contract with intent" },
+        href: "players/jt-staten.html"
+      },
+      {
+        name: "Franky Gonzales",
+        tag: "The Pillars - Star of the show. It’s Franky’s world.",
+        img: { src: "webimages/TAS-Franky-Gonzales.png", alt: "Franky Gonzales posing under the spotlight" },
+        href: "players/franky-gonzales.html"
+      },
+      {
+        name: "Nicky Hyde",
+        tag: "The Pillars - Smile with sharp edges.",
+        img: { src: "webimages/TAS-Nicky-Hyde.png", alt: "Nicky Hyde grinning at the camera" },
+        href: "players/nicky-hyde.html"
+      },
+      {
+        name: "\"All Business\" Dean Mercer",
+        tag: "The Pillars - Contract muscle; City of Lights Battle Royale winner.",
+        img: { src: "webimages/TAS-Dean-Mercer.png", alt: "\"All Business\" Dean Mercer enforcing the Pillars' orders" },
+        href: "players/dean-mercer.html"
+      },
+    ];
+
+    function useCountdown(targetISO) {
+      const target = useMemo(() => new Date(targetISO).getTime(), [targetISO]);
+      const [now, setNow] = useState(Date.now());
+      useEffect(() => {
+        const id = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(id);
+      }, []);
+      const diff = Math.max(0, target - now);
+      const total = Math.floor(diff / 1000);
+      return {
+        days: Math.floor(total / 86400),
+        hours: Math.floor((total % 86400) / 3600),
+        minutes: Math.floor((total % 3600) / 60),
+        seconds: total % 60,
+        done: diff <= 0,
+      };
+    }
+
+    function CTA({ href, children, variant = "primary" }) {
+      const classes = ["btn"];
+      if (variant === "ghost") classes.push("btn--ghost");
+      else if (variant === "outline") classes.push("btn--outline-dark");
+      else classes.push("btn--primary");
+      return (
+        <a href={href} className={classes.join(" ")}>
+          {children}
+        </a>
+      );
+    }
+
+    function SocialLinks({ tone = "dark", className = "" }) {
+      const classes = [
+        "social-list",
+        tone === "light" ? "social-list--light" : "social-list--dark",
+        className
+      ].filter(Boolean);
+      return (
+        <div className={classes.join(" ")}>
+          {SOCIAL_LINKS.map(({ href, icon, label }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer">
+              <img src={icon} alt="" aria-hidden="true" />
+              <span className="sr-only">{label}</span>
+            </a>
+          ))}
+        </div>
+      );
+    }
+
+    function CursorLogo({ src }) {
+      const [position, setPosition] = useState({ x: null, y: null });
+
+      useEffect(() => {
+        if (typeof window === "undefined") {
+          return undefined;
+        }
+        let frame = 0;
+        let lastCoords = null;
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) {
+          return undefined;
+        }
+
+        const update = () => {
+          if (lastCoords) {
+            setPosition(lastCoords);
+            frame = 0;
+            lastCoords = null;
+          }
+        };
+
+        const handleMove = (event) => {
+          if (event.pointerType === "touch") return;
+          lastCoords = { x: event.clientX, y: event.clientY };
+          if (!frame) {
+            frame = requestAnimationFrame(update);
+          }
+        };
+
+        const moveEvent = "PointerEvent" in window ? "pointermove" : "mousemove";
+        window.addEventListener(moveEvent, handleMove, { passive: true });
+        return () => {
+          window.removeEventListener(moveEvent, handleMove);
+          if (frame) {
+            cancelAnimationFrame(frame);
+          }
+        };
+      }, []);
+
+      if (position.x === null || position.y === null) {
+        return null;
+      }
+
+      return (
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            top: `${position.y}px`,
+            left: `${position.x}px`,
+            width: "80px",
+            maxWidth: "20vw",
+            transform: `translate(${CURSOR_OFFSET.x}px, ${CURSOR_OFFSET.y}px)`,
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: 1000,
+            transition: "transform 0.06s linear",
+            willChange: "transform"
+          }}
+        />
+      );
+    }
+
+    function Nav() {
+      return (
+        <header className="site-header">
+          <div className="container site-header__inner">
+            <a href="./" className="site-header__brand">
+              <img src={LOGO_URL} alt="LoCo Pro Wrestling logo" width="44" height="44" />
+              <span>LoCo Pro Wrestling</span>
+            </a>
+            <nav className="site-nav">
+              <CTA href={LINKS.ticket}>Tickets</CTA>
+              <CTA href={LINKS.support} variant="ghost">Support</CTA>
+              <CTA href={LINKS.sponsors} variant="ghost">Sponsors</CTA>
+              <CTA href={LINKS.youtube} variant="ghost">YouTube</CTA>
+            </nav>
+          </div>
+        </header>
+      );
+    }
+
+    function Pill({ label, value }) {
+      return (
+        <div className="countdown__item">
+          <div className="countdown__value">{value}</div>
+          <div className="countdown__label">{label}</div>
+        </div>
+      );
+    }
+
+    function Hero() {
+      const { days, hours, minutes, seconds, done } = useCountdown("2026-03-08T00:00:00Z");
+      return (
+        <section className="hero" style={{ backgroundImage: `url(${HERO_BG_URL})` }}>
+          <div className="hero__inner">
+            <div className="hero__pill">
+              <span>Longmont, Colorado</span>
+              <span>•</span>
+              <span>Dickens Opera House</span>
+            </div>
+            <h1 className="hero__title">Vendetta at the Opera House 2026</h1>
+            <p className="hero__copy">
+              <span>Independent wrestling returns to Longmont.</span>
+              <span>Sat, Mar 7, 2026 • Doors 5:00 • Bell 6:15.</span>
+              <span>Two factions. One city.</span>
+            </p>
+            <div className="hero__actions">
+              <CTA href={LINKS.youtube} variant="ghost">Watch the Story</CTA>
+              <CTA href={LINKS.patreon} variant="ghost">Join on Patreon</CTA>
+            </div>
+            <div className="countdown">
+              {done ? (
+                <div className="countdown__item">
+                  <div className="countdown__value">It’s Show Time</div>
+                  <div className="countdown__label">See you ringside</div>
+                </div>
+              ) : (
+                <>
+                  <Pill label="Days" value={String(days).padStart(2, "0")} />
+                  <Pill label="Hours" value={String(hours).padStart(2, "0")} />
+                  <Pill label="Minutes" value={String(minutes).padStart(2, "0")} />
+                  <Pill label="Seconds" value={String(seconds).padStart(2, "0")} />
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Highlights() {
+      return (
+        <section className="section section--muted">
+          <div className="container highlight-grid">
+            {HIGHLIGHTS.map((item) => (
+              <article key={item.title} className="highlight-card">
+                <div className="brand-card">
+                  <img src={item.img.src} alt={item.img.alt} className="brand-card__logo" />
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                    {item.href ? (
+                      <div className="story-card__actions">
+                        <CTA href={item.href.startsWith('#') ? item.href : item.href} variant="outline">
+                          Explore →
+                        </CTA>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function StoryTease() {
+      return (
+        <section className="section">
+          <div className="container">
+            <div className="section__header section__header--split">
+              <div>
+                <h2 className="section__title">The Story Continues</h2>
+                <p className="section__description">
+                  In Longmont, power meets pressure. The old order holds the keys. The spark becomes a flame.
+                </p>
+              </div>
+              <a href={LINKS.story} className="story-link">
+                Dive deeper →
+              </a>
+            </div>
+            <div className="story-grid">
+              {STORY_CARDS.map((card) => (
+                <article key={card.title} className="story-card">
+                  <div className="brand-card">
+                    <img src={card.logo} alt={`${card.title} logo`} className="brand-card__logo" />
+                    <div>
+                      <h3>{card.title}</h3>
+                      <p>{card.body}</p>
+                      <div className="story-card__actions">
+                        <CTA href={card.href} variant="outline">
+                          Learn more →
+                        </CTA>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function RosterSection() {
+      return (
+        <section className="section section--muted" id="roster">
+          <div className="container">
+            <div className="section__header">
+              <div>
+                <p className="section__eyebrow">Roster</p>
+                <h2 className="section__title">More roster announcements incoming.</h2>
+              </div>
+              <p className="section__description">More to come as Longmont’s homegrown legacy grows.</p>
+            </div>
+            <div className="roster-grid">
+              {ROSTER.map((person) => (
+                <a key={person.name} href={person.href} className="roster-card">
+                  <figure className="roster-card__figure">
+                    <img src={person.img.src} alt={person.img.alt} loading="lazy" />
+                  </figure>
+                  <h3 className="roster-card__name">{person.name}</h3>
+                  <p className="roster-card__tag">{person.tag}</p>
+                  <span className="roster-card__link">View profile →</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function EmailCapture() {
+      const [status, setStatus] = useState("idle");
+      const honeypotStyle = {
+        position: "absolute",
+        left: "-10000px",
+        top: "auto",
+        width: "1px",
+        height: "1px",
+        overflow: "hidden"
+      };
+
+      function onSubmit(e) {
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const website = String(fd.get("website") || "").trim();
+        if (website) {
+          e.currentTarget.reset();
+          setStatus("idle");
+          return;
+        }
+        const email = String(fd.get("email") || "").trim();
+        if (!email || !email.includes("@")) {
+          setStatus("err");
+          return;
+        }
+        const subject = encodeURIComponent("LoCo Pro Wrestling newsletter signup");
+        const body = encodeURIComponent(`Please add ${email} to the newsletter list.`);
+        window.location.href = `${LINKS.email}?subject=${subject}&body=${body}`;
+        setStatus("ok");
+        e.currentTarget.reset();
+      }
+
+      return (
+        <section className="section">
+          <div className="container">
+            <div className="email-card">
+              <div>
+                <h2 className="section__title">Don’t miss the bell.</h2>
+                <p className="section__description" style={{ color: "rgba(255, 255, 255, 0.75)" }}>
+                  Get show updates, roster reveals, and behind-the-scenes.
+                </p>
+              </div>
+              <form className="email-card__form" onSubmit={onSubmit}>
+                <div style={honeypotStyle} aria-hidden="true">
+                  <label htmlFor="newsletter-website">Website</label>
+                  <input
+                    id="newsletter-website"
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+                <input
+                  className="email-card__input"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  required
+                />
+                <button type="submit" className="btn btn--primary">Sign up</button>
+              </form>
+            </div>
+            {status === "ok" && (
+              <p className="email-card__message" style={{ color: "#084f2a", marginTop: "18px" }}>
+                Thanks! Check your inbox to confirm your subscription.
+              </p>
+            )}
+            {status === "err" && (
+              <p className="email-card__message" style={{ color: "#6b0f21", marginTop: "18px" }}>
+                Please enter a valid email address.
+              </p>
+            )}
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="footer">
+          <div className="container">
+            <div className="footer__grid">
+              <div>
+                <div className="footer__heading">LoCo Pro Wrestling</div>
+                <p className="section__description" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                  Longmont’s homegrown pro wrestling project.
+                </p>
+                <SocialLinks tone="dark" className="footer__socials" />
+              </div>
+              <div>
+                <div className="footer__heading">Event</div>
+                <ul className="footer__links">
+                  <li>Sat, Mar 7, 2026</li>
+                  <li>Dickens Opera House</li>
+                  <li>Doors 5:00 • Bell 6:15</li>
+                </ul>
+              </div>
+              <div>
+                <div className="footer__heading">Links</div>
+                <div className="footer__links">
+                  <a href={LINKS.ticket}>Tickets</a>
+                  <a href={LINKS.support}>Support</a>
+                  <a href={LINKS.sponsors}>Sponsors</a>
+                  <a href={LINKS.youtube}>YouTube</a>
+                  <a href={LINKS.patreon}>Patreon</a>
+                  <a href={LINKS.privacy}>Privacy Policy</a>
+                  <a href={LINKS.terms}>Terms of Service</a>
+                  <a href={LINKS.story}>The Story</a>
+                  <a href={LINKS.pressRelease}>Press Release</a>
+                </div>
+              </div>
+              <div>
+                <div className="footer__heading">Contact</div>
+                <div className="footer__links">
+                  <a href={LINKS.email}>biz@locopro.pw</a>
+                </div>
+              </div>
+            </div>
+            <div className="footer__meta">© {new Date().getFullYear()} LoCo Pro Wrestling LLC</div>
+          </div>
+        </footer>
+      );
+    }
+
+    function Home() {
+      return (
+        <>
+          <Nav />
+          <main>
+            <Hero />
+            <Highlights />
+            <StoryTease />
+            <RosterSection />
+            <EmailCapture />
+          </main>
+          <Footer />
+          <CursorLogo src={LOGO_URL} />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<Home />);
+  </script>
+</body>
+</html>

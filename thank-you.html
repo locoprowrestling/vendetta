@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thank You | LoCo Pro Wrestling</title>
+  <meta name="description" content="Thanks for your submission. We got your form and will be in touch soon." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <style>
+    .thankyou-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(1200px 500px at 0% 0%, rgba(207, 172, 0, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 100% 100%, rgba(90, 36, 136, 0.2), transparent 55%),
+        var(--color-background);
+    }
+
+    .thankyou-card {
+      width: min(760px, 100%);
+      background: rgba(207, 207, 207, 0.92);
+      border: 1px solid rgba(90, 36, 136, 0.24);
+      border-radius: 24px;
+      padding: clamp(28px, 5vw, 48px);
+      box-shadow: var(--shadow-strong);
+      text-align: center;
+    }
+
+    .thankyou-logo {
+      width: min(120px, 28vw);
+      margin: 0 auto 20px;
+    }
+
+    .thankyou-eyebrow {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .thankyou-title {
+      margin: 10px 0 12px;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.05;
+      color: var(--color-purple-dark);
+    }
+
+    .thankyou-copy {
+      margin: 0 auto;
+      max-width: 44ch;
+      color: var(--color-text);
+      font-size: clamp(1rem, 2.4vw, 1.1rem);
+    }
+
+    .thankyou-actions {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .thankyou-note {
+      margin: 22px 0 0;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="thankyou-page">
+    <section class="thankyou-card" aria-labelledby="thankyou-title">
+      <img src="webimages/locopro-logo.png" alt="LoCo Pro Wrestling logo" class="thankyou-logo" />
+      <p class="thankyou-eyebrow">Submission received</p>
+      <h1 id="thankyou-title" class="thankyou-title">Thank you<span id="thankyou-name"></span>.</h1>
+      <p class="thankyou-copy">
+        Your form was submitted successfully. We appreciate your support and will follow up soon.
+      </p>
+
+      <div class="thankyou-actions">
+        <a href="./" class="btn btn--primary">Back to Homepage</a>
+        <a href="https://www.eventbrite.com/e/vendetta-at-the-opera-house-tickets-1981065204355" class="btn btn--ghost">View Event</a>
+      </div>
+
+      <p class="thankyou-note">You can close this page or use the buttons above to keep exploring.</p>
+    </section>
+  </main>
+
+  <script>
+    (function personalizeMessage() {
+      const target = document.getElementById("thankyou-name");
+      if (!target) return;
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("name") || params.get("fullName") || params.get("firstName") || "";
+      const normalized = raw.replace(/\s+/g, " ").trim();
+      if (normalized) {
+        target.textContent = ", " + normalized;
+      }
+    })();
+  </script>
+</body>
+</html>
